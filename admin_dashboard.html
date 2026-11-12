@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Librarian Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+ <div><p class="eyebrow">LIBRARY OPERATIONS</p><h1 class="page-title">Librarian dashboard</h1><p class="text-muted mb-0">Your library at a glance. Review requests and keep circulation moving.</p></div>
+ <div class="d-flex gap-2"><a class="btn btn-primary" href="{{ url_for('add_book') }}">＋ Add book</a><a class="btn btn-outline-primary" href="{{ url_for('add_student') }}">＋ Add student</a></div>
+</div>
+<div class="row g-3 mb-4">
+ {% for label,value,sub,icon in [('Book titles',stats.books,'Catalog records','📚'),('Total copies',stats.copies,'Physical inventory','▤'),('Students',stats.students,'Registered accounts','🎓'),('Currently issued',stats.issued,'Active loans','↗'),('Pending requests',stats.pending,'Need your review','✉'),('Overdue loans',stats.overdue,'Past due date','◷')] %}
+ <div class="col-6 col-xl-2"><div class="stat-card"><div class="stat-top"><span class="stat-icon">{{ icon }}</span><span class="stat-label">{{ label }}</span></div><div class="stat-number">{{ value }}</div><div class="stat-sub">{{ sub }}</div></div></div>
+ {% endfor %}
+</div>
+<div class="row g-4">
+ <div class="col-xl-8"><div class="panel-card">
+  <div class="d-flex justify-content-between align-items-center mb-3"><div><h2 class="section-title">Recent book requests</h2><p class="text-muted small mb-0">Approve or reject requests before books are collected.</p></div><a href="{{ url_for('requests_page') }}" class="text-decoration-none">View all →</a></div>
+  {% if pending %}<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Student</th><th>Requested book</th><th>Requested</th><th></th></tr></thead><tbody>
+  {% for r in pending %}<tr><td><div class="fw-semibold">{{ r.name }}</div><div class="small text-muted">{{ r.student_id }}</div></td><td>{{ r.title }}</td><td class="small text-muted">{{ r.requested_at[:10] }}</td><td><a class="btn btn-sm btn-outline-primary" href="{{ url_for('requests_page') }}">Review</a></td></tr>{% endfor %}
+  </tbody></table></div>{% else %}<div class="empty-state">✨ <div class="fw-semibold mt-2">You're all caught up</div><p class="text-muted mb-0">No pending requests right now.</p></div>{% endif %}
+ </div></div>
+ <div class="col-xl-4"><div class="panel-card h-100"><h2 class="section-title">Quick actions</h2><div class="quick-links">
+  <a href="{{ url_for('books') }}"><span>📖</span><div><strong>Manage catalog</strong><small>Add, edit and review books</small></div><b>→</b></a>
+  <a href="{{ url_for('students') }}"><span>🎓</span><div><strong>Manage students</strong><small>Accounts and enrollment IDs</small></div><b>→</b></a>
+  <a href="{{ url_for('loans_page') }}"><span>🔄</span><div><strong>Issue & returns</strong><small>Record collection and returns</small></div><b>→</b></a>
+  <a href="{{ url_for('reports_csv') }}"><span>📊</span><div><strong>Export loan report</strong><small>Download a CSV spreadsheet</small></div><b>↓</b></a>
+ </div><div class="notice mt-4"><strong>Circulation rule</strong><p class="small mb-0">Default loan period is 14 days. Update <code>LOAN_DAYS</code> in <code>app.py</code> to change it.</p></div></div></div>
+</div>
+{% endblock %} ̰

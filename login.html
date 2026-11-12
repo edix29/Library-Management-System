@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% block title %}Login · Campus Library{% endblock %}
+{% block content %}
+<div class="login-wrap">
+ <div class="login-panel">
+  <div class="brand-mark">📚</div><p class="eyebrow">CAMPUS LIBRARY PORTAL</p>
+  <h1 class="h2 fw-bold mb-2">Welcome back</h1><p class="text-muted mb-4">Sign in to discover, request and manage library books.</p>
+  <form method="post">
+   <label class="form-label">Student ID or email</label><input class="form-control form-control-lg mb-3" name="identity" placeholder="e.g. BSC2026001" required autofocus>
+   <label class="form-label">Password</label><input class="form-control form-control-lg mb-4" type="password" name="password" placeholder="Enter your password" required>
+   <button class="btn btn-primary btn-lg w-100">Sign in <span aria-hidden="true">→</span></button>
+  </form>
+  <div class="demo-box mt-4"><div class="fw-semibold mb-2">Demo credentials</div>
+   <div class="small"><strong>Librarian:</strong> admin@library.local / Admin@123</div>
+   <div class="small"><strong>Student:</strong> BSC2026001 / Student@123</div>
+  </div>
+  <p class="small text-muted mt-3 mb-0">For local demonstration only. Change demo passwords and secret key before deployment.</p>
+ </div>
+</div>
+{% endblock %}

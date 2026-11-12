@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Student Dashboard{% endblock %}
+{% block content %}
+<div class="hero-banner mb-4"><div><p class="eyebrow text-white-50">YOUR LEARNING SPACE</p><h1 class="page-title text-white">Hello, {{ session.get('name') }} 👋</h1><p class="text-white-50 mb-0">Find your next great read. Request a book and track every loan in one place.</p></div><a href="{{ url_for('books') }}" class="btn btn-light">Explore catalog →</a></div>
+<div class="row g-3 mb-4">
+ {% for label,value,sub,icon in [('Books issued',stats.issued,'Currently with you','📚'),('Pending requests',stats.pending,'Awaiting librarian','⏳'),('Books returned',stats.history,'Past loans','✓')] %}
+ <div class="col-md-4"><div class="stat-card"><div class="stat-top"><span class="stat-icon">{{ icon }}</span><span class="stat-label">{{ label }}</span></div><div class="stat-number">{{ value }}</div><div class="stat-sub">{{ sub }}</div></div></div>
+ {% endfor %}
+</div>
+<div class="row g-4">
+ <div class="col-xl-7"><div class="panel-card"><div class="d-flex justify-content-between align-items-center mb-3"><div><h2 class="section-title">Your current loans</h2><p class="text-muted small mb-0">Keep an eye on return dates.</p></div><a href="{{ url_for('loans_page') }}">View history →</a></div>
+ {% if loans %}<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Book</th><th>Due date</th><th>Status</th></tr></thead><tbody>{% for l in loans %}<tr><td><div class="fw-semibold">{{ l.title }}</div><small class="text-muted">{{ l.author }}</small></td><td>{{ l.due_date }}</td><td>{% if l.due_date < today %}<span class="badge text-bg-danger">Overdue</span>{% else %}<span class="badge text-bg-success">On loan</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">📘<div class="fw-semibold mt-2">No books issued yet</div><p class="text-muted">Browse the catalog to request your first book.</p><a class="btn btn-primary" href="{{ url_for('books') }}">Browse books</a></div>{% endif %}
+ </div></div>
+ <div class="col-xl-5"><div class="panel-card"><div class="d-flex justify-content-between align-items-center mb-3"><h2 class="section-title mb-0">Recent requests</h2><a href="{{ url_for('requests_page') }}">All requests →</a></div>
+ {% if requests %}{% for r in requests %}<div class="request-row"><div class="book-avatar">📗</div><div class="flex-grow-1"><div class="fw-semibold">{{ r.title }}</div><div class="small text-muted">{{ r.requested_at[:10] }}</div></div><span class="status status-{{ r.status }}">{{ r.status|title }}</span></div>{% endfor %}{% else %}<div class="empty-state">No requests yet.</div>{% endif %}
+ </div><div class="panel-card mt-4"><h2 class="section-title">How borrowing works</h2><div class="step-line"><span>1</span><div><strong>Request a book</strong><p>Choose a title from the catalog.</p></div></div><div class="step-line"><span>2</span><div><strong>Wait for approval</strong><p>The librarian checks availability.</p></div></div><div class="step-line"><span>3</span><div><strong>Collect your book</strong><p>Once approved, visit the library. The librarian records the issue and due date.</p></div></div></div></div>
+</div>
+{% endblock %}
