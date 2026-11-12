@@ -27,4 +27,4 @@ jobs:
 
     - name: Test with pytest
       run: |
-        pyset || test $? -eq 5
+        pytest || test $? -eq 5
